@@ -149,6 +149,36 @@
     .progress-track { height: 8px; overflow: hidden; border-radius: 99px; background: var(--line); margin-bottom: 34px; }
     .progress-fill { width: 10%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #715df2, #55c6b5); transition: width .45s cubic-bezier(.2,.8,.2,1); }
     h1 { max-width: 480px; margin: 0 0 28px; font-size: clamp(25px, 5vw, 34px); line-height: 1.14; letter-spacing: -.04em; }
+    .setup { text-align: center; }
+    .setup h1 { max-width: none; margin-bottom: 10px; }
+    .setup-copy { max-width: 390px; margin: 0 auto 26px; color: var(--muted); }
+    .mode-list { display: grid; gap: 11px; text-align: left; }
+    .mode {
+      display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 12px; width: 100%;
+      padding: 13px 15px; color: var(--ink); border: 1px solid var(--line); border-radius: 15px;
+      background: var(--card-solid); text-align: left; font: inherit; cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .mode:hover { transform: translateY(-2px); border-color: var(--purple); box-shadow: 0 7px 16px rgba(103,82,232,.12); }
+    .mode:focus-visible { outline: 3px solid color-mix(in srgb, var(--purple) 35%, transparent); outline-offset: 2px; }
+    .mode-mark {
+      display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px;
+      color: var(--purple); background: var(--purple-soft); font-size: 18px;
+    }
+    .mode-copy { display: grid; gap: 2px; }
+    .mode-name { font-weight: 800; }
+    .mode-description { color: var(--muted); font-size: 12px; }
+    .mode-arrow { color: var(--muted); font-size: 20px; }
+    .mode-badge {
+      display: inline-block; margin-top: 25px; padding: 6px 9px; border: 1px solid var(--line);
+      border-radius: 8px; color: var(--muted); font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .difficulty-tag {
+      display: inline-flex; align-items: center; min-height: 24px; padding: 4px 8px; border-radius: 7px;
+      color: var(--purple); background: var(--purple-soft); font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
     .answers { display: grid; gap: 11px; }
     .answer {
       position: relative; width: 100%; display: flex; align-items: center; gap: 13px; padding: 14px 15px;
@@ -244,16 +274,36 @@
 
   <script>
     const questions = [
-      { q: "Which planet is known as the Red Planet?", a: ["Venus", "Mars", "Jupiter", "Mercury"], correct: 1, fact: "Mars looks red because iron minerals in its soil oxidize, or rust." },
-      { q: "What is the name of our galaxy?", a: ["Andromeda", "Whirlpool", "Milky Way", "Sombrero"], correct: 2, fact: "The Milky Way is a barred spiral galaxy containing hundreds of billions of stars." },
-      { q: "How long does light from the Sun take to reach Earth?", a: ["About 8 minutes", "About 8 seconds", "About 1 hour", "About 1 day"], correct: 0, fact: "Sunlight travels 150 million kilometers to Earth in about 8 minutes and 20 seconds." },
-      { q: "Which planet has the most prominent ring system?", a: ["Neptune", "Uranus", "Saturn", "Earth"], correct: 2, fact: "Saturn's rings are made mostly of countless pieces of ice and rock." },
-      { q: "What force keeps planets in orbit around the Sun?", a: ["Magnetism", "Gravity", "Friction", "Solar wind"], correct: 1, fact: "Gravity pulls planets inward while their motion carries them forward, creating an orbit." },
-      { q: "What is the largest planet in our solar system?", a: ["Saturn", "Neptune", "Earth", "Jupiter"], correct: 3, fact: "Jupiter is so large that more than 1,300 Earths could fit inside it." },
-      { q: "What is a light-year a measure of?", a: ["Time", "Brightness", "Distance", "Temperature"], correct: 2, fact: "A light-year is the distance light travels in one year: about 9.46 trillion kilometers." },
-      { q: "Which object is at the center of our solar system?", a: ["The Moon", "The Sun", "A black hole", "Earth"], correct: 1, fact: "The Sun contains about 99.86% of the solar system's total mass." },
-      { q: "What do astronauts wear outside a spacecraft?", a: ["A flight suit", "A pressure suit", "A wetsuit", "A thermal blanket"], correct: 1, fact: "Spacesuits provide oxygen, pressure, temperature control, and protection from tiny debris." },
-      { q: "What is the name of the first human-made satellite?", a: ["Apollo 11", "Voyager 1", "Sputnik 1", "Hubble"], correct: 2, fact: "Sputnik 1 launched from the Soviet Union in 1957 and beeped its way into history." }
+      { difficulty: "Explorer", q: "Which planet is known as the Red Planet?", a: ["Venus", "Mars", "Jupiter", "Mercury"], correct: 1, fact: "Mars looks red because iron minerals in its soil oxidize, or rust." },
+      { difficulty: "Explorer", q: "What is the name of our galaxy?", a: ["Andromeda", "Whirlpool", "Milky Way", "Sombrero"], correct: 2, fact: "The Milky Way is a barred spiral galaxy containing hundreds of billions of stars." },
+      { difficulty: "Explorer", q: "How long does light from the Sun take to reach Earth?", a: ["About 8 minutes", "About 8 seconds", "About 1 hour", "About 1 day"], correct: 0, fact: "Sunlight travels 150 million kilometers to Earth in about 8 minutes and 20 seconds." },
+      { difficulty: "Explorer", q: "Which planet has the most prominent ring system?", a: ["Neptune", "Uranus", "Saturn", "Earth"], correct: 2, fact: "Saturn's rings are made mostly of countless pieces of ice and rock." },
+      { difficulty: "Explorer", q: "What force keeps planets in orbit around the Sun?", a: ["Magnetism", "Gravity", "Friction", "Solar wind"], correct: 1, fact: "Gravity pulls planets inward while their motion carries them forward, creating an orbit." },
+      { difficulty: "Explorer", q: "What is the largest planet in our solar system?", a: ["Saturn", "Neptune", "Earth", "Jupiter"], correct: 3, fact: "Jupiter is so large that more than 1,300 Earths could fit inside it." },
+      { difficulty: "Explorer", q: "What is a light-year a measure of?", a: ["Time", "Brightness", "Distance", "Temperature"], correct: 2, fact: "A light-year is the distance light travels in one year: about 9.46 trillion kilometers." },
+      { difficulty: "Explorer", q: "Which object is at the center of our solar system?", a: ["The Moon", "The Sun", "A black hole", "Earth"], correct: 1, fact: "The Sun contains about 99.86% of the solar system's total mass." },
+      { difficulty: "Explorer", q: "What do astronauts wear outside a spacecraft?", a: ["A flight suit", "A pressure suit", "A wetsuit", "A thermal blanket"], correct: 1, fact: "Spacesuits provide oxygen, pressure, temperature control, and protection from tiny debris." },
+      { difficulty: "Explorer", q: "What is the name of the first human-made satellite?", a: ["Apollo 11", "Voyager 1", "Sputnik 1", "Hubble"], correct: 2, fact: "Sputnik 1 launched from the Soviet Union in 1957 and beeped its way into history." },
+      { difficulty: "Pilot", q: "Why does the Moon have phases?", a: ["It changes shape", "We see different sunlit portions", "Clouds cover it", "It spins faster"], correct: 1, fact: "The Moon's phase depends on how much of its sunlit half is visible from Earth." },
+      { difficulty: "Pilot", q: "Which planet rotates on its side?", a: ["Mars", "Uranus", "Venus", "Neptune"], correct: 1, fact: "Uranus has an axial tilt of about 98 degrees, likely caused by a massive ancient collision." },
+      { difficulty: "Pilot", q: "What is the asteroid belt located between?", a: ["Earth and Mars", "Mars and Jupiter", "Jupiter and Saturn", "Venus and Earth"], correct: 1, fact: "The main asteroid belt occupies the region between Mars and Jupiter." },
+      { difficulty: "Pilot", q: "What powers the Sun?", a: ["Burning coal", "Nuclear fusion", "Chemical batteries", "Geothermal heat"], correct: 1, fact: "The Sun fuses hydrogen into helium in its core, releasing enormous energy." },
+      { difficulty: "Pilot", q: "What is a comet's tail made of?", a: ["Only fire", "Ice and dust pushed by sunlight", "Liquid water", "Solid metal"], correct: 1, fact: "Solar heat releases gas and dust from a comet, and the solar wind pushes them into a tail." },
+      { difficulty: "Pilot", q: "Which planet has the Great Red Spot?", a: ["Jupiter", "Saturn", "Neptune", "Mars"], correct: 0, fact: "Jupiter's Great Red Spot is a huge storm that has persisted for centuries." },
+      { difficulty: "Pilot", q: "What is the event horizon of a black hole?", a: ["Its brightest region", "The boundary beyond which light cannot escape", "Its orbit", "A ring of stars"], correct: 1, fact: "The event horizon marks the point where escape would require traveling faster than light." },
+      { difficulty: "Pilot", q: "What is the International Space Station's approximate orbit time?", a: ["90 minutes", "12 hours", "3 days", "1 month"], correct: 0, fact: "The station circles Earth about every 90 minutes, creating roughly 16 sunrises per day." },
+      { difficulty: "Pilot", q: "What type of galaxy is the Milky Way?", a: ["Elliptical", "Barred spiral", "Irregular", "Ring"], correct: 1, fact: "The Milky Way is a spiral galaxy with a central bar of stars." },
+      { difficulty: "Pilot", q: "What causes Earth's seasons?", a: ["Distance from the Sun alone", "Earth's axial tilt", "The Moon's shadow", "Solar flares"], correct: 1, fact: "Earth's tilted axis changes the angle and duration of sunlight during its orbit." },
+      { difficulty: "Commander", q: "What is the Chandrasekhar limit associated with?", a: ["Maximum mass of a white dwarf", "Speed of a comet", "Age of the Sun", "Size of a galaxy"], correct: 0, fact: "A white dwarf above about 1.4 solar masses cannot support itself against gravity." },
+      { difficulty: "Commander", q: "What is cosmic microwave background radiation?", a: ["Light from nearby stars", "Afterglow of the Big Bang", "Heat from black holes", "Radio from Earth"], correct: 1, fact: "The cosmic microwave background is faint radiation left over from the early universe." },
+      { difficulty: "Commander", q: "What does spectroscopy help astronomers determine?", a: ["A planet's exact age", "The composition and motion of an object", "A star's number of moons", "The shape of dark matter"], correct: 1, fact: "Patterns in an object's spectrum reveal its chemical makeup, temperature, and motion." },
+      { difficulty: "Commander", q: "What is a neutron star primarily made of?", a: ["Hydrogen gas", "Ultra-dense neutrons", "Liquid methane", "Silicate dust"], correct: 1, fact: "A neutron star is the collapsed core of a massive star, packed mostly with neutrons." },
+      { difficulty: "Commander", q: "What is gravitational lensing?", a: ["A telescope mirror effect", "Light bending around massive objects", "A planet's atmospheric haze", "A star's color shift"], correct: 1, fact: "Massive objects curve spacetime, bending and magnifying light from objects behind them." },
+      { difficulty: "Commander", q: "Which law describes the relationship between a planet's orbit and its distance from the Sun?", a: ["Kepler's third law", "Newton's first law", "Hubble's law", "Ohm's law"], correct: 0, fact: "Kepler's third law relates the square of an orbital period to the cube of its orbit's size." },
+      { difficulty: "Commander", q: "What is dark matter inferred from?", a: ["Its visible glow", "Its gravitational effects", "Its radio broadcasts", "Its reflected sunlight"], correct: 1, fact: "Dark matter does not emit light, but its gravity affects stars, galaxies, and light." },
+      { difficulty: "Commander", q: "What is the habitable zone around a star?", a: ["The zone with the most asteroids", "The region where liquid water could exist", "The star's magnetic field", "The region nearest a black hole"], correct: 1, fact: "A habitable zone has temperatures that could allow liquid water on a suitable planet's surface." },
+      { difficulty: "Commander", q: "What happens during a Type Ia supernova?", a: ["A white dwarf undergoes a runaway explosion", "A planet forms rings", "A comet freezes", "A galaxy stops rotating"], correct: 0, fact: "A Type Ia supernova occurs when a white dwarf is pushed past a critical stability limit." },
+      { difficulty: "Commander", q: "Why can astronomers observe the early universe?", a: ["Gravity travels backward", "Light takes time to travel", "Stars are transparent", "Telescopes create old light"], correct: 1, fact: "Because light travels at a finite speed, distant observations show objects as they were in the past." }
     ];
 
     const quiz = document.getElementById("quiz");
@@ -261,21 +311,63 @@
     let score = 0;
     let locked = false;
     let selectedAnswers = [];
+    let selectedMode = "";
+    let activeQuestions = [];
+
+    const modes = [
+      { name: "Explorer", icon: "✦", description: "Build your space fundamentals." },
+      { name: "Pilot", icon: "◈", description: "Navigate trickier mission concepts." },
+      { name: "Commander", icon: "◎", description: "Take on advanced astronomy." }
+    ];
+
+    function renderModeSelection() {
+      quiz.innerHTML = `
+        <div class="setup">
+          <div class="eyebrow">Mission setup</div>
+          <h1>Choose your flight path</h1>
+          <p class="setup-copy">Select a difficulty mode before launch. Every mission contains 10 questions.</p>
+          <div class="mode-list" role="group" aria-label="Quiz difficulty">
+            ${modes.map(mode => `
+              <button class="mode" data-mode="${mode.name}">
+                <span class="mode-mark" aria-hidden="true">${mode.icon}</span>
+                <span class="mode-copy">
+                  <span class="mode-name">${mode.name}</span>
+                  <span class="mode-description">${mode.description}</span>
+                </span>
+                <span class="mode-arrow" aria-hidden="true">→</span>
+              </button>
+            `).join("")}
+          </div>
+          <span class="mode-badge">10 questions // one mission</span>
+        </div>
+      `;
+      quiz.querySelectorAll(".mode").forEach(button => button.addEventListener("click", startMode));
+    }
+
+    function startMode(event) {
+      selectedMode = event.currentTarget.dataset.mode;
+      activeQuestions = questions.filter(item => item.difficulty === selectedMode);
+      current = 0;
+      score = 0;
+      selectedAnswers = [];
+      renderQuestion();
+    }
 
     function renderQuestion() {
       locked = false;
-      const item = questions[current];
+      const item = activeQuestions[current];
       const letters = ["A", "B", "C", "D"];
       quiz.innerHTML = `
         <div class="topline">
-          <span class="eyebrow">Question ${current + 1} of ${questions.length}</span>
+          <span class="eyebrow">Question ${current + 1} of ${activeQuestions.length}</span>
+          <span class="difficulty-tag">${selectedMode}</span>
           <span class="score" aria-label="Current score">
             <span>Score</span>
             <strong aria-live="polite">${score}</strong>
           </span>
         </div>
-        <div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuenow="${current + 1}" aria-valuemin="1" aria-valuemax="${questions.length}">
-          <div class="progress-fill" style="width:${((current + 1) / questions.length) * 100}%"></div>
+        <div class="progress-track" role="progressbar" aria-label="${selectedMode} quiz progress" aria-valuenow="${current + 1}" aria-valuemin="1" aria-valuemax="${activeQuestions.length}">
+          <div class="progress-fill" style="width:${((current + 1) / activeQuestions.length) * 100}%"></div>
         </div>
         <h1>${item.q}</h1>
         <div class="answers">${item.a.map((answer, i) => `
@@ -284,7 +376,7 @@
           </button>`).join("")}
         </div>
         <div class="feedback" id="feedback" role="status"></div>
-        <button class="next" id="next">${current === questions.length - 1 ? "See my results" : "Next question"} <span aria-hidden="true">→</span></button>
+        <button class="next" id="next">${current === activeQuestions.length - 1 ? "See my results" : "Next question"} <span aria-hidden="true">→</span></button>
       `;
       quiz.querySelectorAll(".answer").forEach(button => button.addEventListener("click", selectAnswer));
       quiz.querySelector("#next").addEventListener("click", nextQuestion);
@@ -294,7 +386,7 @@
       if (locked) return;
       locked = true;
       const selected = Number(event.currentTarget.dataset.index);
-      const item = questions[current];
+      const item = activeQuestions[current];
       const buttons = [...quiz.querySelectorAll(".answer")];
       const feedback = quiz.querySelector("#feedback");
       buttons.forEach(button => button.disabled = true);
@@ -315,7 +407,7 @@
 
     function nextQuestion() {
       if (!locked) return;
-      if (current < questions.length - 1) {
+      if (current < activeQuestions.length - 1) {
         current++;
         renderQuestion();
       } else {
@@ -324,25 +416,25 @@
     }
 
     function renderResults() {
-      const ratio = score / questions.length;
+      const ratio = score / activeQuestions.length;
       const emoji = ratio === 1 ? "🌟" : ratio >= .7 ? "🚀" : ratio >= .4 ? "🛰️" : "🌙";
       const title = ratio === 1 ? "Perfect orbit!" : ratio >= .7 ? "Stellar work!" : ratio >= .4 ? "Nice launch!" : "Keep exploring!";
-      const message = ratio === 1 ? "You mapped every constellation correctly." : `You navigated ${score} of ${questions.length} questions correctly. Every explorer starts with curiosity.`;
+      const message = ratio === 1 ? "You mapped every constellation correctly." : `You navigated ${score} of ${activeQuestions.length} questions correctly. Every explorer starts with curiosity.`;
       const letters = ["A", "B", "C", "D"];
       quiz.innerHTML = `
         <div class="results">
           <div class="result-emoji" aria-hidden="true">${emoji}</div>
-          <div class="eyebrow">Mission complete</div>
+          <div class="eyebrow">${selectedMode} mission complete</div>
           <h1>${title}</h1>
           <p>${message}</p>
-          <div class="final-score"><strong>${score}/${questions.length}</strong> correct</div>
+          <div class="final-score"><strong>${score}/${activeQuestions.length}</strong> correct</div>
           <div class="review">
             <div class="review-heading">
               <h2>Mission debrief</h2>
               <span>Question review</span>
             </div>
             <div class="review-list">
-              ${questions.map((item, index) => {
+              ${activeQuestions.map((item, index) => {
                 const selected = selectedAnswers[index];
                 const isCorrect = selected === item.correct;
                 return `
@@ -364,11 +456,11 @@
         </div>
       `;
       quiz.querySelector("#restart").addEventListener("click", () => {
-        current = 0; score = 0; selectedAnswers = []; renderQuestion();
+        current = 0; score = 0; selectedAnswers = []; selectedMode = ""; activeQuestions = []; renderModeSelection();
       });
     }
 
-    renderQuestion();
+    renderModeSelection();
   </script>
 </body>
 </html>
